@@ -1,0 +1,67 @@
+{
+  "artifacts": {
+    "model": true,
+    "features": true,
+    "predictions": true,
+    "inference_report": true,
+    "temporal_robustness": true,
+    "temporal_leakage_audit": true,
+    "final_validation": true
+  },
+  "model": {
+    "valid": true,
+    "name": "ThreatLens Conservative",
+    "version": "1.0",
+    "type": "RandomForestClassifier",
+    "features": 36
+  },
+  "features": {
+    "rows": 154813,
+    "columns": 42,
+    "valid": true
+  },
+  "predictions": {
+    "rows": 154813,
+    "required_columns": true,
+    "score_valid": true,
+    "category_values_valid": true,
+    "record_ids_valid": true,
+    "valid": true
+  },
+  "category_contract": {
+    "matches": 154813,
+    "mismatches": 0,
+    "valid": true,
+    "thresholds": {
+      "CRITICAL": ">= 0.50",
+      "HIGH": ">= 0.20",
+      "MEDIUM": ">= 0.05",
+      "LOW": ">= 0.01",
+      "MINIMAL": "< 0.01"
+    }
+  },
+  "distribution": {
+    "CRITICAL": 209,
+    "HIGH": 296,
+    "MEDIUM": 190,
+    "LOW": 4939,
+    "MINIMAL": 149179
+  },
+  "inference_report": {
+    "rows": 154813,
+    "consistent": true
+  },
+  "temporal_robustness": {
+    "rows": 12,
+    "available": true
+  },
+  "temporal_leakage": {
+    "status": null,
+    "available": false
+  },
+  "final_validation": {
+    "rows": 2,
+    "available": true
+  },
+  "status": "PASS"
+}

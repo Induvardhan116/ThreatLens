@@ -1,22 +1,18 @@
 # Python
-.venv/
 __pycache__/
 *.py[cod]
-*.class
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
 
 # Environment / secrets
 .env
 .env.*
 !.env.example
-
-# Data
-data/
-
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/src/assets/
-frontend/public/icons.svg
 
 # IDE
 .vscode/
@@ -29,24 +25,18 @@ Thumbs.db
 # Logs
 *.log
 
-# Testing / coverage
-.pytest_cache/
-.coverage
-htmlcov/
+# Data: ignore everything by default
+data/**
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*_backup.py
-*.step37-backup
+# Allow directories needed to reach deployment files
+!data/
+!data/processed/
+!data/processed/inference/
+!data/processed/knowledge_graph/
 
-# Local review/export artifacts
-/THREATLENS_SOURCE_REVIEW.txt
-/load_features_dataset_patch.txt
-
-# Local model artifacts and databases
-*.joblib
-*.sqlite
-*.sqlite3
-*.db
+# Deployment runtime files only
+!data/processed/inference/threatlens_predictions.csv
+!data/processed/inference/threatlens_final_audit.json
+!data/processed/knowledge_graph/threatlens_graph_nodes.csv
+!data/processed/knowledge_graph/threatlens_graph_edges.csv
+!data/processed/knowledge_graph/threatlens_graph_summary.json

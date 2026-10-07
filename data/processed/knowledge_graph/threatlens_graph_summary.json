@@ -1,0 +1,40 @@
+{
+  "project": "ThreatLens",
+  "graph_version": "1.1",
+  "selection_method": "Production ThreatLens risk category with score ordering",
+  "source_records": 154813,
+  "prediction_records": 154813,
+  "selected_cves": 500,
+  "nodes": 5813,
+  "edges": 9719,
+  "node_types": {
+    "CVE": 500,
+    "CWE": 116,
+    "CPE": 3720,
+    "Reference": 1471,
+    "RiskCategory": 5,
+    "KEV": 1
+  },
+  "risk_distribution": {
+    "CRITICAL": 100,
+    "HIGH": 100,
+    "MEDIUM": 100,
+    "LOW": 100,
+    "MINIMAL": 100
+  },
+  "relationship_distribution": {
+    "HAS_RISK": 500,
+    "KNOWN_EXPLOITED": 199,
+    "HAS_CWE": 556,
+    "AFFECTS": 6993,
+    "REFERENCES": 1471
+  },
+  "attack_technique_nodes": 0,
+  "attack_technique_note": "No ATT&CK technique IDs are populated in the current enriched dataset.",
+  "outputs": {
+    "graphml": "D:\\ThreatLens\\data\\processed\\knowledge_graph\\threatlens_graph.graphml",
+    "nodes": "D:\\ThreatLens\\data\\processed\\knowledge_graph\\threatlens_graph_nodes.csv",
+    "edges": "D:\\ThreatLens\\data\\processed\\knowledge_graph\\threatlens_graph_edges.csv",
+    "summary": "D:\\ThreatLens\\data\\processed\\knowledge_graph\\threatlens_graph_summary.json"
+  }
+}
