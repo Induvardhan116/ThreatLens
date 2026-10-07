@@ -7,12 +7,13 @@ from typing import Any
 
 import pandas as pd
 
+from backend.config import resolve_data_dir
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = resolve_data_dir()
 
-NODES_PATH = PROJECT_ROOT / "data" / "processed" / "knowledge_graph" / "threatlens_graph_nodes.csv"
-EDGES_PATH = PROJECT_ROOT / "data" / "processed" / "knowledge_graph" / "threatlens_graph_edges.csv"
-OUTPUT_DIR = PROJECT_ROOT / "data" / "processed" / "evidence"
+NODES_PATH = DATA_DIR / "processed" / "knowledge_graph" / "threatlens_graph_nodes.csv"
+EDGES_PATH = DATA_DIR / "processed" / "knowledge_graph" / "threatlens_graph_edges.csv"
+OUTPUT_DIR = DATA_DIR / "processed" / "evidence"
 TEST_OUTPUT = OUTPUT_DIR / "evidence_engine_test_results.json"
 
 

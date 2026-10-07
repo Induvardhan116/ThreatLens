@@ -36,10 +36,18 @@ VITE_API_PROXY_TARGET=http://127.0.0.1:8001
 # VITE_API_BASE_URL=https://api.example.test/api
 ```
 
-The deployment host must route `/api` to the application API when
-`VITE_API_BASE_URL` is unset. It must also serve `index.html` as the fallback
-for the client-side routes (`/vulnerabilities`, `/graph`, `/research`,
-`/investigator`, and `/evidence`) so deep links and browser refreshes work.
+For production, deploy this folder to Vercel with `frontend` as the project
+Root Directory. Set `VITE_API_BASE_URL` to the deployed API URL ending in
+`/api` (for example `https://threatlens-api.example.com/api`) in the Vercel
+project's environment variables, then redeploy. `vercel.json` routes
+client-side paths such as `/vulnerabilities`, `/graph`, `/research`,
+`/investigator`, and `/evidence` back to the app entry point.
+
+The backend must allow the deployed site origin through
+`THREATLENS_CORS_ORIGINS`. API-backed dashboard features require the backend's
+runtime datasets; see the repository root README for the required files and
+data provisioning notes. The optional browser-local log analysis works
+without the API.
 
 ## Optional local log analysis
 

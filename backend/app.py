@@ -1,13 +1,15 @@
-from pathlib import Path
 from typing import Any, Dict, Optional
+from urllib.parse import urlsplit
 
 import json
-import sys
+import os
 
 import pandas as pd
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+
+from backend.config import resolve_data_dir
 
 
 # ========================================================================
@@ -15,10 +17,44 @@ from fastapi.middleware.cors import CORSMiddleware
 # STEP 37 - EVIDENCE + AI INVESTIGATOR INTEGRATION
 # ========================================================================
 
-BASE_DIR = Path(r"D:\ThreatLens")
+DEFAULT_CORS_ORIGINS = (
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+)
 
-if str(BASE_DIR) not in sys.path:
-    sys.path.insert(0, str(BASE_DIR))
+
+def configured_cors_origins(configured_origins: Optional[str] = None) -> list[str]:
+    value = configured_origins
+    if value is None:
+        value = os.getenv("THREATLENS_CORS_ORIGINS", "")
+
+    origins = []
+    for item in value.split(","):
+        origin = item.strip().rstrip("/")
+        if not origin:
+            continue
+        parsed = urlsplit(origin)
+        if (
+            parsed.scheme not in {"http", "https"}
+            or not parsed.hostname
+            or parsed.path
+            or parsed.query
+            or parsed.fragment
+            or parsed.username
+            or parsed.password
+        ):
+            raise ValueError(
+                "THREATLENS_CORS_ORIGINS must contain comma-separated HTTP(S) origins without paths."
+            )
+        try:
+            parsed.port
+        except ValueError as exc:
+            raise ValueError(
+                "THREATLENS_CORS_ORIGINS contains an invalid port."
+            ) from exc
+        origins.append(origin)
+
+    return origins or list(DEFAULT_CORS_ORIGINS)
 
 
 # ------------------------------------------------------------------------
@@ -38,10 +74,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=configured_cors_origins(),
     allow_credentials=False,
     allow_methods=[
         "GET",
@@ -57,41 +90,38 @@ app.add_middleware(
 # PATHS
 # ------------------------------------------------------------------------
 
+DATA_DIR = resolve_data_dir()
+
 PREDICTIONS_PATH = (
-    BASE_DIR
-    / "data"
+    DATA_DIR
     / "processed"
     / "inference"
     / "threatlens_predictions.csv"
 )
 
 GRAPH_NODES_PATH = (
-    BASE_DIR
-    / "data"
+    DATA_DIR
     / "processed"
     / "knowledge_graph"
     / "threatlens_graph_nodes.csv"
 )
 
 GRAPH_EDGES_PATH = (
-    BASE_DIR
-    / "data"
+    DATA_DIR
     / "processed"
     / "knowledge_graph"
     / "threatlens_graph_edges.csv"
 )
 
 GRAPH_SUMMARY_PATH = (
-    BASE_DIR
-    / "data"
+    DATA_DIR
     / "processed"
     / "knowledge_graph"
     / "threatlens_graph_summary.json"
 )
 
 AUDIT_PATH = (
-    BASE_DIR
-    / "data"
+    DATA_DIR
     / "processed"
     / "inference"
     / "threatlens_final_audit.json"

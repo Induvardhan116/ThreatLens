@@ -35,9 +35,6 @@ security data.
 
 ## Run locally
 
-ThreatLens currently has local data and path assumptions; for the existing
-backend configuration, use a Windows checkout at `D:\ThreatLens`.
-
 1. Install Python dependencies:
 
    ```powershell
@@ -45,10 +42,9 @@ backend configuration, use a Windows checkout at `D:\ThreatLens`.
    .\.venv\Scripts\python.exe -m pip install -r requirements.txt
    ```
 
-2. Prepare the local prediction and graph data files expected by
-   `backend/app.py`. These generated and source datasets are intentionally not
-   included in this repository. The API reports data-dependent errors until
-   the required files are available.
+2. Prepare the runtime data files listed under [Deployment](#deployment).
+   Source and intermediate datasets are intentionally not included in this
+   repository.
 
 3. Start the API:
 
@@ -68,9 +64,51 @@ The Vite development server proxies `/api` to `http://127.0.0.1:8001`. Set
 `VITE_API_PROXY_TARGET` to override that target. Set `VITE_API_BASE_URL` when
 the browser should use an absolute API base URL instead.
 
-Production hosting must route `/api` to the backend and serve the frontend's
-`index.html` as the fallback for client-side routes such as `/graph` and
-`/vulnerabilities`.
+## Deployment
+
+The frontend and API are separate services: Vercel hosts the Vite frontend,
+and the included Render Blueprint deploys the FastAPI application. In Vercel,
+import this repository with `frontend` as the Root Directory. The included
+`frontend/vercel.json` rewrites client-side routes to `index.html`.
+
+After deploying the API, set Vercel's `VITE_API_BASE_URL` environment variable
+to the API origin plus `/api`, for example
+`https://threatlens-api.example.com/api`, then redeploy the frontend. Set the
+API's `THREATLENS_CORS_ORIGINS` to the exact Vercel production origin (no path),
+and add any preview/custom domains that should be allowed, comma-separated.
+Do not use `*` for this setting.
+
+### Runtime data required by API features
+
+The source repository excludes datasets. The API needs these five generated
+runtime files for its dashboard, vulnerability, graph, evidence, and
+investigator features:
+
+- `processed/inference/threatlens_predictions.csv`
+- `processed/knowledge_graph/threatlens_graph_nodes.csv`
+- `processed/knowledge_graph/threatlens_graph_edges.csv`
+- `processed/knowledge_graph/threatlens_graph_summary.json`
+- `processed/inference/threatlens_final_audit.json` (used for audit status)
+
+Together these files are about 9.5 MB in the current local dataset; the raw
+research datasets and model/evaluation artifacts are not needed by the
+deployed API. Provide these files to the API host using its persistent storage
+or another private deployment mechanism, preserving the paths above. Set
+`THREATLENS_DATA_DIR` to the directory containing `processed/` (for example,
+`/var/data` when that is the mounted storage root). Never put credentials or
+private data in the public repository.
+
+The Render Blueprint defaults `THREATLENS_DATA_DIR` to `./data` and deploys a
+health-checked API. Until the five runtime files are provisioned, `/api/health`
+will confirm that the service process is running, but data-backed endpoints
+will return explicit errors; check `/api/system/status` for dataset readiness.
+The optional browser-local log analysis does not depend on this data or API.
+
+Render's free service has ephemeral storage; files written there are not a
+durable dataset deployment. Choose persistent storage or secure external
+provisioning before relying on API features in production. The service can
+start without the data files, but a healthy process alone does not mean the
+dashboard data is ready.
 
 ## Frontend checks
 
