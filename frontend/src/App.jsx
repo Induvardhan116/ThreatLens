@@ -92,13 +92,12 @@ function apiErrorMessage(error, fallback) {
 }
 
 function apiStatusMessage(system) {
-  if (system?.status !== "ready") {
-    return system?.status || "Check the API connection";
-  }
+  if (!system) return "Check the API connection";
 
   const unavailable = [
     !system.prediction_dataset && "prediction dataset",
     !system.knowledge_graph && "knowledge graph",
+    !system.final_audit && "final audit",
   ].filter(Boolean);
 
   return unavailable.length
@@ -390,7 +389,7 @@ function App() {
     document.title = `${pageTitles[activePage]} | ThreatLens`;
   }, [activePage]);
 
-  const apiAvailable = system?.status === "ready";
+  const apiAvailable = system !== null;
 
   if (loading) {
     return (
@@ -979,11 +978,11 @@ function Dashboard({
           </div>
           <div
             className={`online-pill ${
-              system?.status === "ready" ? "" : "disconnected"
+              system ? "" : "disconnected"
             }`}
           >
             <span />
-            {system?.status === "ready" ? "Connected" : "Unavailable"}
+            {system ? "Connected" : "Unavailable"}
           </div>
         </div>
       </section>

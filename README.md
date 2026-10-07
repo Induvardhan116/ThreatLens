@@ -101,7 +101,9 @@ private data in the public repository.
 The Render Blueprint defaults `THREATLENS_DATA_DIR` to `./data` and deploys a
 health-checked API. Until the five runtime files are provisioned, `/api/health`
 will confirm that the service process is running, but data-backed endpoints
-will return explicit errors; check `/api/system/status` for dataset readiness.
+will return explicit errors; `/api/system/status` will report `degraded` and
+identify which runtime datasets are unavailable. It reports `ready` only when
+all five runtime files are present.
 The optional browser-local log analysis does not depend on this data or API.
 
 Render's free service has ephemeral storage; files written there are not a

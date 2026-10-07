@@ -760,9 +760,10 @@ def system_status():
     )
 
     prediction_ready = PREDICTIONS_PATH.exists()
+    data_ready = prediction_ready and graph_ready and audit_exists
 
     return {
-        "status": "ready",
+        "status": "ready" if data_ready else "degraded",
         "prediction_dataset": prediction_ready,
         "knowledge_graph": graph_ready,
         "final_audit": audit_exists,
