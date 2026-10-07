@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+requests
+httpx
+pandas
+numpy
+scikit-learn
+scipy
+networkx
+beautifulsoup4
+lxml
+tqdm
+pytest

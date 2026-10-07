@@ -1,0 +1,52 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.class
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Data
+data/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/src/assets/
+frontend/public/icons.svg
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*_backup.py
+*.step37-backup
+
+# Local review/export artifacts
+/THREATLENS_SOURCE_REVIEW.txt
+/load_features_dataset_patch.txt
+
+# Local model artifacts and databases
+*.joblib
+*.sqlite
+*.sqlite3
+*.db
